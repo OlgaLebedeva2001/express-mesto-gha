@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '649b11d33354cf47eb588b8a', // ID пользователя из mongo.
+    _id: '649b504d310500c26cb69743', // ID пользователя из mongo.
   };
 
   next();
