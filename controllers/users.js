@@ -85,4 +85,3 @@ module.exports.updateUserAvatar = (req, res) => {
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
-
