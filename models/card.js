@@ -1,7 +1,5 @@
-// models/card.js
-
 const mongoose = require('mongoose');
-// Опишем схему:
+
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -25,9 +23,8 @@ const cardSchema = new mongoose.Schema({
   }],
   createdAt: {
     type: Date,
-    required: true,
+    default: Date.now,
   },
 });
 
-// создаём модель и экспортируем её
 module.exports = mongoose.model('card', cardSchema);

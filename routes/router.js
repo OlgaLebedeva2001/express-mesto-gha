@@ -1,5 +1,5 @@
-// router.js
-const router = require('express').Router(); // создали роутер
+const router = require('express').Router();
+
 const userRoutes = require('./users');
 const cardRoutes = require('./cards');
 
@@ -10,4 +10,4 @@ router.use('/*', (req, res) => {
     .send({ message: '404: Страница не найдена.' });
 });
 
-module.exports = router
+module.exports = router;

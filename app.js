@@ -1,23 +1,24 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const helmet = require('helmet');
-const routes = require('./routes/router'); // импортируем роутер
+
+const routes = require('./routes/router');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-app.use(helmet());
-app.disable('x-powered-by');
+
 app.use(express.json());
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '649b11d33354cf47eb588b8a' // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: '649b11d33354cf47eb588b8a', // ID пользователя из mongo.
   };
 
   next();
 });
 
 app.use(routes);
+
+// Данный адрес взят после подключения через терминал с помощью mongosh:
 mongoose
   .connect('mongodb://127.0.0.1:27017/mestodb')
   .then(() => {
@@ -27,6 +28,10 @@ mongoose
     console.log('Не удалось подключиться к БД');
   });
 
+app.get('/', (req, res) => {
+  res.send('Вывод инф-ции на страницу...');
+});
+
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
-})
+});
