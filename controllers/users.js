@@ -1,14 +1,13 @@
 const User = require('../models/user');
 
-//Получение всех пользователей:
+// Находим всех пользователей:
 module.exports.getUsers = (req, res) => {
-  User
-    .find({})
-    .then((users) => res.send(users))
+  User.find({})
+    .then((users) => res.status(200).send(users))
     .catch(() => res.status(500).send({ message: 'Ошибка по умолчанию' }));
 };
 
-//Получение пользователя по id:
+// Находим пользователя по ID:
 module.exports.getUserId = (req, res) => {
   User
     .findById(req.params.userId)
@@ -33,11 +32,11 @@ module.exports.getUserId = (req, res) => {
     });
 };
 
-//Создание пользователя:
+// Создаем пользователя:
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(201).send(user))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({
@@ -47,8 +46,7 @@ module.exports.createUser = (req, res) => {
         res.status(500).send({ message: 'Ошибка по умолчанию' });
       }
     });
-
-}
+};
 
 // Обновление данных пользователя:
 module.exports.updateUserProfile = (req, res) => {
@@ -84,7 +82,7 @@ module.exports.updateUserAvatar = (req, res) => {
             message: 'Переданы некорректные данные при обновлении аватара',
           });
       }
-
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
+
