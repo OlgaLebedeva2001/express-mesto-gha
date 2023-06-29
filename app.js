@@ -1,37 +1,46 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 
-const routes = require('./routes/router');
+const limiter = require('./middlewares/rateLimiter');
+const routeSignup = require('./routes/signup');
+const routeSignin = require('./routes/signin');
 
+const auth = require('./middlewares/auth');
+
+const routeUsers = require('./routes/users');
+const routeCards = require('./routes/cards');
+
+const NotFoundError = require('./helpers/errors/NotFoundError');
+const errorHandler = require('./middlewares/errorHandler');
+
+const URL = 'mongodb://127.0.0.1:27017/mestodb';
 const { PORT = 3000 } = process.env;
+
+mongoose.set('strictQuery', true);
+mongoose.connect(URL);
+
 const app = express();
 
-app.use(express.json());
+app.use(helmet());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '649b504d310500c26cb69743', // ID пользователя из mongo.
-  };
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  next();
-});
+app.use(limiter);
 
-app.use(routes);
+app.use('/', routeSignup);
+app.use('/', routeSignin);
 
-// Данный адрес взят после подключения через терминал с помощью mongosh:
-mongoose
-  .connect('mongodb://127.0.0.1:27017/mestodb')
-  .then(() => {
-    console.log('БД подключена');
-  })
-  .catch(() => {
-    console.log('Не удалось подключиться к БД');
-  });
+app.use(auth);
 
-app.get('/', (req, res) => {
-  res.send('Вывод инф-ции на страницу...');
-});
+app.use('/users', routeUsers);
+app.use('/cards', routeCards);
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+app.use((req, res, next) => next(new NotFoundError('Страницы по запрошенному URL не существует')));
+app.use(errors());
+app.use(errorHandler);
+
+app.listen(PORT);
