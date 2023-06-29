@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 
 const { URL_REGEX } = require('../utils/constants');
-const { createUser } = require('../controllers/users');
+const { createUser } = require('../controllers/auth');
 
 router.post(
   '/signup',
