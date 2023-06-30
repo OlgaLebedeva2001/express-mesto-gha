@@ -17,8 +17,7 @@ const routeCards = require('./routes/cards');
 const NotFoundError = require('./helpers/errors/NotFoundError');
 const errorHandler = require('./middlewares/errorHandler');
 
-const URL = 'mongodb://127.0.0.1:27017/mestodb';
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
 mongoose.set('strictQuery', true);
 
